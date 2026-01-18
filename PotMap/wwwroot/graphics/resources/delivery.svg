@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Outer ring -->
+  <circle cx="100" cy="100" r="80"
+          fill="none"
+          stroke="#009900"
+          stroke-width="12" />
+
+  <!-- Inner ring -->
+  <circle cx="100" cy="100" r="50"
+          fill="none"
+          stroke="#009900"
+          stroke-width="12" />
+
+  <!-- Filled center circle -->
+  <circle cx="100" cy="100" r="20"
+          fill="#009900" />
+</svg>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   id="svg4823"
+   sodipodi:docname="cactus.svg"
+   viewBox="0 0 626.28312 790.77208"
+   version="1.1"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   width="626.28314"
+   height="790.77209"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs4825">
+    <linearGradient
+       id="linearGradient5349"
+       y2="-140.62"
+       gradientUnits="userSpaceOnUse"
+       x2="966.79999"
+       gradientTransform="translate(0,-0.50508)"
+       y1="433.66"
+       x1="71.07"
+       inkscape:collect="always">
+      <stop
+         id="stop5345"
+         style="stop-color:#2e7f11"
+         offset="0" />
+      <stop
+         id="stop5347"
+         style="stop-color:#38290f;stop-opacity:0"
+         offset="1" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     bordercolor="#666666"
+     inkscape:pageshadow="2"
+     inkscape:window-y="-11"
+     pagecolor="#ffffff"
+     inkscape:window-height="1766"
+     inkscape:window-maximized="1"
+     inkscape:zoom="0.98994948"
+     inkscape:window-x="-11"
+     showgrid="false"
+     borderopacity="1.0"
+     inkscape:current-layer="layer1"
+     inkscape:cx="291.42901"
+     inkscape:cy="281.32749"
+     inkscape:window-width="2880"
+     inkscape:pageopacity="0.0"
+     inkscape:document-units="px"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(-53.059728,-30.542843)">
+    <path
+       id="path4833"
+       sodipodi:nodetypes="sssssssssssssssssssssss"
+       style="fill:url(#linearGradient5349);stroke:#000000;stroke-width:1px"
+       inkscape:connector-curvature="0"
+       d="M 257.36,810.6 C 256.71,740.77 281.94,640.69 245.46,562.09 216.08,498.81 128.49,480.71 99,417.48 59.551,332.93 64.732,223.45 101.26,137.6 c 6.9628,-16.364 21.564,-30.865 38.141,-37.304 13.329,-5.1776 29.586,-3.8529 42.875,1.4286 15.129,6.0128 42.851,17.289 36.611,32.325 -33.618,80.995 -27.393,126.66 4.979,199.43 13.81,31.044 27.081,56.213 55.977,74.088 28.242,17.47 9.3858,-215.42 17.143,-329.49 1.2931,-19.016 35.284,-21.791 53.538,-27.274 25.807,-7.7516 43.855,-6.6101 69.701,1.0102 17.2,5.0711 61.523,9.3428 61.619,27.274 0.55544,103.68 -19.628,280.86 -15.152,354.56 1.4239,23.45 50.543,-12.18 62.629,-32.325 25.641,-42.737 3.3642,-100.68 -2.0203,-149.5 -1.8823,-17.066 13.262,-35.018 34.345,-38.386 16.015,-2.5581 32.282,-4.682 48.487,-4.0406 23.089,0.91384 24.438,12.714 30.305,24.244 31.37,61.648 10.733,140.99 9.4083,207.3 -1.518,75.996 -154.88,55.764 -192.93,121.56 -41.689,72.094 -1.0999,189.85 -10,249.64 -2.1879,14.697 -189.47,8.3335 -189.56,-1.5301 z" />
+  </g>
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Cactus</dc:title>
+        <dc:date>2012-03-24T10:03:53</dc:date>
+        <dc:description>A cactus :&gt;</dc:description>
+        <dc:source>https://openclipart.org/detail/169087/cactus-by-julianvb98</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Julianvb98</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>cactus</rdf:li>
+            <rdf:li>kaktus</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

@@ -1,0 +1,324 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap");
+
+:root {
+  color-scheme: dark;
+  --bg-1: #060f1a;
+  --bg-2: #0e1e2f;
+  --accent: #6de0ff;
+  --accent-muted: #2f8ca6;
+  --card: rgba(9, 23, 39, 0.85);
+  --text: #f3fbff;
+  --muted: #8ea8ba;
+  --marker-shadow: rgba(0, 0, 0, 0.35);
+  --marker-outline: rgba(0, 0, 0, 0.9);
+  --marker-outline-soft: rgba(0, 0, 0, 0.55);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  color: var(--text);
+  background: black;
+  overflow: hidden;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: linear-gradient(90deg, rgba(8, 24, 40, 0.85) 0%, rgba(8, 24, 40, 0.55) 100%);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 10;
+}
+
+.brand {
+  min-width: 220px;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.brand p {
+  margin: 0.1rem 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.icon-row {
+  flex: 1;
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+  min-width: 0;
+  scrollbar-width: thin;
+}
+
+.icon-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.icon-row::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+
+.poi-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.65rem;
+  background: rgba(6, 17, 29, 0.8);
+  color: var(--text);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  touch-action: none;
+  height: 4vh;
+}
+
+.poi-icon:focus-visible {
+  outline: 2px solid var(--accent);
+}
+
+body.mode-edit .poi-icon:active {
+  transform: scale(0.95);
+  cursor: grabbing;
+}
+
+body.mode-view .poi-icon:active {
+  transform: scale(0.97);
+}
+
+.poi-icon img {
+  height: 4vh;
+  width: auto;
+  max-width: 80px;
+  pointer-events: none;
+  filter: drop-shadow(0 0 3px var(--marker-outline-soft));
+}
+
+.poi-icon.poi-icon--muted {
+  opacity: 0.35;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.mode-edit .poi-icon {
+  cursor: grab;
+}
+
+body.mode-edit .poi-icon:active {
+  cursor: grabbing;
+}
+
+.map-stage {
+  flex: 1;
+  position: relative;
+}
+
+.map-viewport {
+  width: 100%;
+  height: 100%;
+  border-radius: 1.2rem;
+  background: black;
+  overflow: hidden;
+  position: relative;
+  touch-action: none;
+}
+
+.map-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  will-change: transform;
+}
+
+#mapImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.poi-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Tiles should render crisply with no smoothing or subpixel gaps */
+.map-tile {
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+  display: block;
+  backface-visibility: hidden;
+  transform-origin: top left;
+  will-change: transform;
+}
+
+.poi-marker {
+  position: absolute;
+  width: 2vh;
+  height: 2vh;
+  transform: translate(-50%, -50%);
+  filter:
+    drop-shadow(0 0 1px var(--marker-outline))
+    drop-shadow(0 0 4px var(--marker-outline-soft))
+    drop-shadow(0 3px 6px var(--marker-shadow));
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+
+body.mode-view .poi-marker {
+  cursor: pointer;
+}
+
+.poi-marker.poi-marker--hidden {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+body.mode-view .poi-marker.poi-marker--visited {
+  opacity: var(--visited-opacity, 0.5);
+}
+
+.hud {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  pointer-events: none;
+}
+
+.hud-chip {
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(5, 12, 21, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.drag-ghost {
+  position: fixed;
+  width: 2vh;
+  height: 2vh;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45));
+  z-index: 1500;
+}
+
+.trash-can {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  width: 64px;
+  height: 64px;
+  border-radius: 1rem;
+  background: rgba(5, 12, 21, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: normal;
+  color: var(--muted);
+  text-transform: none;
+  pointer-events: none;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 1000;
+  opacity: 1;
+  visibility: visible;
+}
+
+.trash-can.trash-can--active {
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(109, 224, 255, 0.35);
+  transform: scale(1.08);
+}
+
+body.mode-view .trash-can {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.mode-toggle {
+  flex: 0 0 auto;
+  margin-left: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(6, 17, 29, 0.8);
+  color: var(--text);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.mode-toggle.mode-toggle--active {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 8px rgba(109, 224, 255, 0.25);
+}
+
+@media (max-width: 720px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mode-toggle {
+    align-self: flex-end;
+    margin-left: 0;
+  }
+
+  .map-stage {
+    padding: 0.5rem;
+  }
+
+  .map-viewport {
+    border-radius: 0.75rem;
+  }
+}

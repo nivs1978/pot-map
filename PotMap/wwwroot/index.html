@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Path of Titans - map</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style/main.css" />
+  </head>
+  <body class="mode-view">
+    <div class="app">
+      <header class="toolbar">
+        <div class="icon-row" role="list" data-poi-toolbar>
+        </div>
+        <button id="editModeToggle" class="mode-toggle" type="button" aria-pressed="false" aria-label="Toggle edit mode" title="Toggle edit mode">✏️</button>
+      </header>
+      <main class="map-stage">
+        <div id="mapViewport" class="map-viewport" aria-label="Interactive Gondwa map">
+          <div id="mapContent" class="map-content">
+            <img id="mapImage" src="maps/gondwa.jpg" alt="Gondwa world map" draggable="false" />
+          </div>
+          <div id="poiLayer" class="poi-layer" aria-live="polite"></div>
+        </div>
+      </main>
+    </div>
+    <div id="trashCan" class="trash-can" role="button" aria-label="Drop markers here to delete">&#128465;</div>
+    <script src="main.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+Herbivore Food,
+Carcass/Body,
+Burrow,
+Water,
+Insectivore Food,
+Fish,
+Salt Rock,
+Bones,
+Rocks,
+Ramas/Braches,
+Concha,
+Raices

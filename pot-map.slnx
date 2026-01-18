@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="PotMap/PotMap.csproj" />
+  <Project Path="TileGenerator/TileGenerator.csproj" />
+</Solution>
