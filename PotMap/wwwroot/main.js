@@ -6,6 +6,8 @@ const tileLayerElement = document.getElementById("tileLayer");
 const statusReadout = document.getElementById("statusReadout");
 const trashCan = document.getElementById("trashCan");
 const editModeToggle = document.getElementById("editModeToggle");
+const burgerToggle = document.getElementById("burgerToggle");
+const iconGridPanel = document.getElementById("iconGridPanel");
 
 const API_ENDPOINT = "/api/data";
 const MAP_ID_HEX = "f1a07941faef496095bf69e01705bc6a";
@@ -121,6 +123,7 @@ mapViewport.addEventListener("pointercancel", handlePointerEnd);
 
 initializePoiInterface();
 initializeEditControls();
+initializeIconGridPanel();
 syncVisitedOpacityVariable();
 
 // Lock the interactive canvas to the intrinsic map size once the texture loads.
@@ -717,7 +720,65 @@ function setupToolbar() {
     renderToolbarIcons(root);
     return;
   }
+  // If there's no compact toolbar, ensure the grid panel is populated so icons are visible
+  const gridRoot = document.querySelector('[data-poi-grid]');
+  if (gridRoot) {
+    renderToolbarIcons(gridRoot);
+  }
   bindToolbarPointerHandlers(document.querySelectorAll(".poi-icon"));
+}
+
+function initializeIconGridPanel() {
+  if (!burgerToggle || !iconGridPanel) return;
+  burgerToggle.addEventListener('click', () => {
+    if (!iconGridPanel) return;
+    const currentlyHidden = iconGridPanel.getAttribute('aria-hidden') === 'true';
+    const newHidden = !currentlyHidden;
+    iconGridPanel.setAttribute('aria-hidden', String(newHidden));
+    burgerToggle.setAttribute('aria-expanded', String(!newHidden));
+    if (!newHidden) {
+      const gridRoot = document.querySelector('[data-poi-grid]');
+      if (gridRoot) {
+        // if catalog empty, show retry control
+        if (Object.keys(PoiCatalog).length === 0) {
+          renderEmptyGrid(gridRoot);
+        } else {
+          renderToolbarIcons(gridRoot);
+        }
+      }
+    }
+  });
+  // render initially into toolbar root and grid (grid stays hidden until opened)
+  const gridRoot = document.querySelector('[data-poi-grid]');
+  if (gridRoot) {
+    if (Object.keys(PoiCatalog).length === 0) renderEmptyGrid(gridRoot);
+    else renderToolbarIcons(gridRoot);
+  }
+}
+
+function renderEmptyGrid(container) {
+  container.innerHTML = '';
+  const wrapper = document.createElement('div');
+  wrapper.className = 'poi-empty';
+  const msg = document.createElement('div');
+  msg.textContent = 'No icons loaded';
+  msg.style.marginBottom = '8px';
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.textContent = 'Retry loading icons';
+  btn.addEventListener('click', async () => {
+    try {
+      await initializePoiCatalog();
+      const entries = Object.keys(PoiCatalog || {});
+      if (entries.length) renderToolbarIcons(container);
+      else renderEmptyGrid(container);
+    } catch (e) {
+      renderEmptyGrid(container);
+    }
+  });
+  wrapper.appendChild(msg);
+  wrapper.appendChild(btn);
+  container.appendChild(wrapper);
 }
 
 function getToolbarRoot() {
@@ -734,13 +795,25 @@ function renderToolbarIcons(container) {
     if (!asset?.src) {
       return;
     }
-    const icon = document.createElement("img");
+    // Create a button wrapper with an inner img so CSS matches expected structure
+    const icon = document.createElement("button");
     icon.className = "poi-icon";
+    icon.type = "button";
     icon.dataset.type = String(type);
-    icon.src = asset.src;
-    icon.alt = asset.label || "";
-    icon.title = asset.label || "";
+    icon.dataset.label = asset.label || "";
+    // create an inner img so the icon is visible and can size predictably
+    const img = document.createElement('img');
+    img.className = 'poi-icon-img';
+    img.src = asset.src;
+    img.alt = asset.label || '';
+    img.title = asset.label || '';
+    img.draggable = false;
+    img.addEventListener('dragstart', preventNativeDrag);
+    // fallback label for accessibility
+    icon.setAttribute('aria-label', asset.label || '');
+    icon.title = asset.label || '';
     applyIconVisibility(icon);
+    icon.appendChild(img);
     fragment.appendChild(icon);
   });
   container.appendChild(fragment);
@@ -784,7 +857,11 @@ function bindToolbarPointerHandlers(icons) {
   icons.forEach((icon) => {
     icon.addEventListener("pointerdown", handleToolbarIconPointerDown);
     icon.addEventListener("click", handleToolbarIconClick);
-    icon.addEventListener("dragstart", preventNativeDrag);
+    // ensure inner images don't steal events
+    const innerImg = icon.querySelector && icon.querySelector('img');
+    if (innerImg) {
+      innerImg.style.pointerEvents = 'none';
+    }
   });
 }
 
@@ -904,6 +981,15 @@ function hydratePoiCatalog(records) {
   records.forEach(({ id, label, src }) => {
     PoiCatalog[id] = { label, src };
   });
+  // Re-render available icon containers when catalog updates
+  try {
+    const gridRoot = document.querySelector('[data-poi-grid]');
+    if (gridRoot) renderToolbarIcons(gridRoot);
+    const toolbarRoot = getToolbarRoot();
+    if (toolbarRoot) renderToolbarIcons(toolbarRoot);
+  } catch (e) {
+    // ignore render errors
+  }
 }
 
 async function postToApi(payload, options = {}) {

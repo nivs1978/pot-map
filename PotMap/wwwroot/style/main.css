@@ -14,6 +14,20 @@
   --marker-outline-soft: rgba(0, 0, 0, 0.55);
 }
 
+.poi-icon--image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.poi-icon-img {
+  height: 28px;
+  width: 28px;
+  object-fit: contain;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -37,6 +51,11 @@ body {
   height: 100%;
 }
 
+/* Make toolbar overlay the map so the map can use full viewport space */
+.app {
+  position: relative;
+}
+
 .toolbar {
   display: flex;
   align-items: center;
@@ -44,8 +63,80 @@ body {
   padding: 0.5rem 0.75rem;
   background: linear-gradient(90deg, rgba(8, 24, 40, 0.85) 0%, rgba(8, 24, 40, 0.55) 100%);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  z-index: 10;
+  border-radius: 0.75rem;
+  margin: 0.75rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  pointer-events: auto;
+}
+
+.burger-toggle {
+  flex: 0 0 auto;
+  margin-right: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(6,17,29,0.7);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.icon-grid-panel {
+  position: absolute;
+  top: 3.5rem;
+  left: 0.75rem;
+  /* keep panel only as wide as it needs to be */
+  width: fit-content;
+  max-width: calc(100% - 1.5rem);
+  max-height: calc(100% - 4rem);
+  background: rgba(6,17,29,0.9);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 0.5rem;
+  padding: 0.35rem;
+  overflow: auto;
+  z-index: 2000;
+  display: none;
+}
+
+.icon-grid-panel[aria-hidden="false"] {
+  display: block;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+.icon-grid {
+  display: grid;
+  /* columns sized to content so panel stays narrow */
+  grid-template-columns: repeat(8, min-content);
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.icon-grid .poi-icon {
+  width: auto;
+  min-height: 40px;
+  padding: 0.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-grid .poi-icon {
+  height: auto;
+  padding: 0.4rem;
+}
+
+.poi-icon-label {
+  display: none;
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 6px;
+}
+
+.icon-grid .poi-icon img {
+  height: 4vh;
 }
 
 .brand {
@@ -75,6 +166,14 @@ body {
   scrollbar-width: thin;
 }
 
+/* hide legacy horizontal toolbar if present */
+.icon-row { display: none; }
+
+.icon-row .poi-icon {
+  width: auto;
+  min-width: 56px;
+}
+
 .icon-row::-webkit-scrollbar {
   height: 6px;
 }
@@ -86,22 +185,23 @@ body {
 
 .poi-icon {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.4rem 0.6rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 0.65rem;
-  background: rgba(6, 17, 29, 0.8);
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 0.12rem 0.18rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.45rem;
+  background: rgba(6, 17, 29, 0.85);
   color: var(--text);
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   cursor: pointer;
   user-select: none;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.12s ease, transform 0.08s ease;
   touch-action: none;
-  height: 4vh;
+  height: auto;
+  width: auto;
 }
 
 .poi-icon:focus-visible {
@@ -118,11 +218,11 @@ body.mode-view .poi-icon:active {
 }
 
 .poi-icon img {
-  height: 4vh;
-  width: auto;
-  max-width: 80px;
-  pointer-events: none;
-  filter: drop-shadow(0 0 3px var(--marker-outline-soft));
+  display: inline-block;
+}
+
+.poi-icon {
+  max-width: 140px;
 }
 
 .poi-icon.poi-icon--muted {
@@ -139,14 +239,17 @@ body.mode-edit .poi-icon:active {
 }
 
 .map-stage {
-  flex: 1;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .map-viewport {
   width: 100%;
   height: 100%;
-  border-radius: 1.2rem;
+  border-radius: 0;
   background: black;
   overflow: hidden;
   position: relative;

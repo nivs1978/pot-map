@@ -10,10 +10,13 @@
   <body class="mode-view">
     <div class="app">
       <header class="toolbar">
-        <div class="icon-row" role="list" data-poi-toolbar>
-        </div>
+        <button id="burgerToggle" class="burger-toggle" type="button" aria-expanded="false" aria-label="Open icon menu">☰</button>
+        <!-- icon row removed; use burger menu to open full icon grid -->
         <button id="editModeToggle" class="mode-toggle" type="button" aria-pressed="false" aria-label="Toggle edit mode" title="Toggle edit mode">✏️</button>
       </header>
+      <div id="iconGridPanel" class="icon-grid-panel" aria-hidden="true">
+        <div class="icon-grid" role="list" data-poi-grid></div>
+      </div>
       <main class="map-stage">
         <div id="mapViewport" class="map-viewport" aria-label="Interactive Gondwa map">
           <div id="mapContent" class="map-content">
