@@ -6,8 +6,8 @@ const tileLayerElement = document.getElementById("tileLayer");
 const statusReadout = document.getElementById("statusReadout");
 const trashCan = document.getElementById("trashCan");
 const editModeToggle = document.getElementById("editModeToggle");
-const burgerToggle = document.getElementById("burgerToggle");
 const iconGridPanel = document.getElementById("iconGridPanel");
+const discordButton = document.getElementById("discordButton");
 
 const API_ENDPOINT = "/api/data";
 const MAP_ID_HEX = "f1a07941faef496095bf69e01705bc6a";
@@ -71,6 +71,33 @@ function getMapName() {
       const name = filename.split('.').slice(0, -1).join('.') || filename;
       if (name) return name;
     }
+  } catch (e) {
+    // ignore
+  }
+  return MAP_ID_HEX;
+}
+
+function initializeDiscordButton() {
+  try {
+    const btn = document.getElementById('discordButton') || document.querySelector('[data-discord-button]');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      try {
+        const w = window.open('https://discord.gg/PxUJsMG6', '_blank');
+        if (w) {
+          try { w.opener = null; } catch (e) { /* ignore */ }
+        } else {
+          // popup blocked, navigate instead
+          window.location.href = 'https://discord.gg/PxUJsMG6';
+        }
+      } catch (e) {
+        try { window.location.href = 'https://discord.gg/PxUJsMG6'; } catch (err) { /* ignore */ }
+      }
+    }, { passive: true });
+  } catch (e) {
+    // ignore
+  }
+}
 
 // Check GPU / rasterization limits and log a helpful warning if the map when
 // scaled would require backing surfaces larger than the GPU's max texture size.
@@ -102,11 +129,7 @@ function checkRasterizationLimits() {
     );
   }
 }
-  } catch (e) {
-    // ignore
-  }
-  return MAP_ID_HEX;
-}
+
 
 if ((mapImage.complete && mapImage.naturalWidth) || hasDeclaredDimensions()) {
   handleImageReady();
@@ -124,6 +147,7 @@ mapViewport.addEventListener("pointercancel", handlePointerEnd);
 initializePoiInterface();
 initializeEditControls();
 initializeIconGridPanel();
+initializeDiscordButton();
 syncVisitedOpacityVariable();
 
 // Lock the interactive canvas to the intrinsic map size once the texture loads.
@@ -729,30 +753,23 @@ function setupToolbar() {
 }
 
 function initializeIconGridPanel() {
-  if (!burgerToggle || !iconGridPanel) return;
-  burgerToggle.addEventListener('click', () => {
-    if (!iconGridPanel) return;
-    const currentlyHidden = iconGridPanel.getAttribute('aria-hidden') === 'true';
-    const newHidden = !currentlyHidden;
-    iconGridPanel.setAttribute('aria-hidden', String(newHidden));
-    burgerToggle.setAttribute('aria-expanded', String(!newHidden));
-    if (!newHidden) {
-      const gridRoot = document.querySelector('[data-poi-grid]');
-      if (gridRoot) {
-        // if catalog empty, show retry control
-        if (Object.keys(PoiCatalog).length === 0) {
-          renderEmptyGrid(gridRoot);
-        } else {
-          renderToolbarIcons(gridRoot);
-        }
-      }
-    }
-  });
-  // render initially into toolbar root and grid (grid stays hidden until opened)
+  if (!iconGridPanel) return;
+  // Ensure the panel is visible and populate it immediately
+  try {
+    iconGridPanel.setAttribute('aria-hidden', 'false');
+  } catch (e) {
+    // ignore
+  }
+  // render initially into grid and toolbar roots
   const gridRoot = document.querySelector('[data-poi-grid]');
   if (gridRoot) {
     if (Object.keys(PoiCatalog).length === 0) renderEmptyGrid(gridRoot);
     else renderToolbarIcons(gridRoot);
+  }
+  const toolbarRoot = getToolbarRoot();
+  if (toolbarRoot) {
+    if (Object.keys(PoiCatalog).length === 0) renderEmptyGrid(toolbarRoot);
+    else renderToolbarIcons(toolbarRoot);
   }
 }
 

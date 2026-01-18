@@ -10,11 +10,12 @@
   <body class="mode-view">
     <div class="app">
       <header class="toolbar">
-        <button id="burgerToggle" class="burger-toggle" type="button" aria-expanded="false" aria-label="Open icon menu">☰</button>
-        <!-- icon row removed; use burger menu to open full icon grid -->
+        <button id="discordButton" class="burger-toggle" type="button" aria-label="Open Discord" title="Join Discord">
+          <img src="graphics/discord.svg" alt="Discord" style="height:20px;width:20px;display:block;" />
+        </button>
         <button id="editModeToggle" class="mode-toggle" type="button" aria-pressed="false" aria-label="Toggle edit mode" title="Toggle edit mode">✏️</button>
       </header>
-      <div id="iconGridPanel" class="icon-grid-panel" aria-hidden="true">
+      <div id="iconGridPanel" class="icon-grid-panel" aria-hidden="false">
         <div class="icon-grid" role="list" data-poi-grid></div>
       </div>
       <main class="map-stage">

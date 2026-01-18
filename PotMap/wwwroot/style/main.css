@@ -59,7 +59,6 @@ body {
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
   padding: 0.5rem 0.75rem;
   background: linear-gradient(90deg, rgba(8, 24, 40, 0.85) 0%, rgba(8, 24, 40, 0.55) 100%);
   backdrop-filter: blur(12px);
@@ -86,14 +85,14 @@ body {
 
 .icon-grid-panel {
   position: absolute;
-  top: 3.5rem;
+  top: 4rem;
   left: 0.75rem;
   /* keep panel only as wide as it needs to be */
   width: fit-content;
   max-width: calc(100% - 1.5rem);
   max-height: calc(100% - 4rem);
-  background: rgba(6,17,29,0.9);
-  border: 1px solid rgba(255,255,255,0.06);
+  /* transparent background and no border as requested */
+  background: rgb(0,0,0,0.5);
   border-radius: 0.5rem;
   padding: 0.35rem;
   overflow: auto;
@@ -103,7 +102,7 @@ body {
 
 .icon-grid-panel[aria-hidden="false"] {
   display: block;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  /* no box shadow */
 }
 
 .icon-grid {
@@ -126,6 +125,12 @@ body {
 .icon-grid .poi-icon {
   height: auto;
   padding: 0.4rem;
+}
+
+/* Make icon grid cells semi-transparent (50%) while preserving muted styling */
+/* Make icon grid cells semi-transparent (50%) by reducing their background alpha; keep icon images fully opaque */
+.icon-grid .poi-icon {
+  background: rgba(6,17,29,0.6);
 }
 
 .poi-icon-label {
