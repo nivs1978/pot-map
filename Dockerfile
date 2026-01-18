@@ -18,6 +18,7 @@ RUN dotnet publish "${PROJECT_FILE}" -c Release -o /app/publish /p:UseAppHost=fa
 ARG PROJECT_DIR=PotMap
 
 FROM base AS final
+ARG PROJECT_DIR=PotMap
 WORKDIR /app
 COPY --from=build /app/publish .
 COPY --from=build /src/${PROJECT_DIR}/wwwroot/tiles ./wwwroot/tiles
