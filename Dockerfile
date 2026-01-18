@@ -15,7 +15,10 @@ COPY . .
 WORKDIR /src/${PROJECT_DIR}
 RUN dotnet publish "${PROJECT_FILE}" -c Release -o /app/publish /p:UseAppHost=false
 
+ARG PROJECT_DIR=PotMap
+
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
+COPY --from=build /src/${PROJECT_DIR}/wwwroot/tiles ./wwwroot/tiles
 ENTRYPOINT ["dotnet", "PotMap.dll"]

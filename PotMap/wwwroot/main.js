@@ -74,7 +74,7 @@ function getMapName() {
   return MAP_ID_HEX;
 }
 
-if (mapImage.complete && mapImage.naturalWidth) {
+if ((mapImage.complete && mapImage.naturalWidth) || hasDeclaredDimensions()) {
   handleImageReady();
 } else {
   mapImage.addEventListener("load", handleImageReady);
@@ -93,10 +93,14 @@ syncVisitedOpacityVariable();
 
 // Lock the interactive canvas to the intrinsic map size once the texture loads.
 function handleImageReady() {
+  const declaredWidth = getDeclaredDimension("mapwidth");
+  const declaredHeight = getDeclaredDimension("mapheight");
   // If the source image is still present use its intrinsic size; otherwise fall back to the original
   // full-map dimensions so coordinates (percent of image) remain consistent with the generated tiles.
-  state.mapWidth = mapImage.naturalWidth || ORIGINAL_MAP_WIDTH;
-  state.mapHeight = mapImage.naturalHeight || ORIGINAL_MAP_HEIGHT;
+  const fallbackWidth = mapImage.naturalWidth || ORIGINAL_MAP_WIDTH;
+  const fallbackHeight = mapImage.naturalHeight || ORIGINAL_MAP_HEIGHT;
+  state.mapWidth = declaredWidth ?? fallbackWidth;
+  state.mapHeight = declaredHeight ?? fallbackHeight;
   if (!state.mapWidth || !state.mapHeight) {
     return;
   }
@@ -141,6 +145,28 @@ function handleImageReady() {
   handleResize();
   refreshMarkerPositions();
   refreshTiles();
+}
+
+function hasDeclaredDimensions() {
+  return (
+    getDeclaredDimension("mapwidth") !== null &&
+    getDeclaredDimension("mapheight") !== null
+  );
+}
+
+function getDeclaredDimension(attrName) {
+  if (!mapImage?.getAttribute) {
+    return null;
+  }
+  const raw = mapImage.getAttribute(`data-${attrName}`);
+  if (!raw) {
+    return null;
+  }
+  const value = Number(raw);
+  if (!Number.isFinite(value) || value <= 0) {
+    return null;
+  }
+  return value;
 }
 
 // Recalculate viewport bounds and fit/center the map when needed.
