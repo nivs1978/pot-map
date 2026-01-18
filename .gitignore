@@ -7,8 +7,8 @@
 .env
 
 # Large static map assets
-tiles/
-gondwa.png
+TileGenerator/gondwa.png
+TileGenerator/tiles/
 
 # User-specific files
 *.rsuser
@@ -486,3 +486,4 @@ $RECYCLE.BIN/
 *.swp
 .vscode
 PotMap/Properties
+PotMap/wwwroot/tiles

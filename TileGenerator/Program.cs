@@ -89,8 +89,8 @@ static void SaveTiles(Bitmap img, int zoom, int tileSize, string mapName)
             g.DrawImage(img, new Rectangle(0, 0, w, h), new Rectangle(sx, sy, w, h), GraphicsUnit.Pixel);
 
             // Save as PNG to preserve exact pixels and avoid compression artifacts at tile edges
-            string filePath = Path.Combine(outDir, $"{tx}_{ty}.png");
-            tile.Save(filePath, ImageFormat.Png);
+            string filePath = Path.Combine(outDir, $"{tx}_{ty}.jpg");
+            tile.Save(filePath, ImageFormat.Jpeg);
         }
     }
 }

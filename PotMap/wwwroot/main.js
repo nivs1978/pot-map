@@ -17,6 +17,7 @@ const VISITED_OPACITY = 0.5;
 const ORIGINAL_MAP_WIDTH = 9400;
 const ORIGINAL_MAP_HEIGHT = 9400;
 const TILE_SIZE = 256;
+const TILE_EXTENSION = "jpg";
 const ACCESS_PROMPT_MESSAGE = "Enter the access password to manage POIs:";
 const ACCESS_DENIED_ALERT = "Access denied. Please enter the password again.";
 const MAX_ACCESS_RETRY_ATTEMPTS = 2;
@@ -460,8 +461,12 @@ function refreshTiles() {
         img.style.height = `${sizePx + overlap}px`;
         img.draggable = false;
         img.alt = '';
-        img.onerror = () => { img.style.display = 'none'; };
-        img.src = `/tiles/${mapName}/${zoom}/${x}_${y}.jpg`;
+        const tileSrc = buildTileSrc(mapName, zoom, x, y);
+        img.onerror = () => {
+          img.style.display = 'none';
+          logTileLoadFailure(tileSrc, zoom, x, y);
+        };
+        img.src = tileSrc;
         tileLayer.appendChild(img);
         tileCache.set(key, img);
       }
@@ -490,8 +495,12 @@ function refreshTiles() {
         img.style.height = `${sizePx + overlap}px`;
         img.draggable = false;
         img.alt = '';
-        img.onerror = () => { img.style.display = 'none'; };
-        img.src = `/tiles/${mapName}/${zoom}/${x}_${y}.jpg`;
+        const tileSrc = buildTileSrc(mapName, zoom, x, y);
+        img.onerror = () => {
+          img.style.display = 'none';
+          logTileLoadFailure(tileSrc, zoom, x, y);
+        };
+        img.src = tileSrc;
         tileLayer.appendChild(img);
         tileCache.set(key, img);
       }
@@ -546,9 +555,16 @@ function refreshTiles() {
       img.alt = '';
       const p = new Promise((resolve) => {
         let settled = false;
+        const tileSrc = buildTileSrc(mapName, zoom, x, y);
         img.onload = () => { if (!settled) { settled = true; resolve({ img, ok: true }); } };
-        img.onerror = () => { if (!settled) { settled = true; resolve({ img, ok: false }); } };
-        img.src = `/tiles/${mapName}/${zoom}/${x}_${y}.jpg`;
+        img.onerror = () => {
+          if (!settled) {
+            settled = true;
+            logTileLoadFailure(tileSrc, zoom, x, y);
+            resolve({ img, ok: false });
+          }
+        };
+        img.src = tileSrc;
       });
       newLayer.appendChild(img);
       newCache.set(key, img);
@@ -574,6 +590,19 @@ function refreshTiles() {
     newCache.forEach((v, k) => tileCache.set(k, v));
     currentTileZoom = zoom;
   });
+}
+
+function buildTileSrc(mapName, zoom, x, y) {
+  return `/tiles/${mapName}/${zoom}/${x}_${y}.${TILE_EXTENSION}`;
+}
+
+function logTileLoadFailure(src, zoom, x, y) {
+  const message = `[tiles] Failed to load tile (zoom=${zoom}, x=${x}, y=${y}) from ${src}`;
+  if (console && typeof console.error === "function") {
+    console.error(message);
+  } else if (console && typeof console.log === "function") {
+    console.log(message);
+  }
 }
 
 function syncGhostSizeWithScale() {
