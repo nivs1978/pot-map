@@ -85,10 +85,14 @@ static void SaveTiles(Bitmap img, int zoom, int tileSize, string mapName)
             g.SmoothingMode = SmoothingMode.HighQuality;
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            // Draw the portion of the source image into the top-left corner of the tile
-            g.DrawImage(img, new Rectangle(0, 0, w, h), new Rectangle(sx, sy, w, h), GraphicsUnit.Pixel);
+            // Draw the portion of the source image scaled to the full tile area so edge tiles
+            // (which may be smaller than tileSize) correctly fill the tile rather than leaving
+            // an empty/white region in the bottom/right of the tile.
+            g.DrawImage(img, new Rectangle(0, 0, tileSize, tileSize), new Rectangle(sx, sy, w, h), GraphicsUnit.Pixel);
 
-            // Save as PNG to preserve exact pixels and avoid compression artifacts at tile edges
+            // Save as JPEG to match the viewer's expected extension. JPEG does not support
+            // alpha; we pre-fill the tile with a sampled edge color to avoid transparent
+            // regions becoming black.
             string filePath = Path.Combine(outDir, $"{tx}_{ty}.jpg");
             tile.Save(filePath, ImageFormat.Jpeg);
         }

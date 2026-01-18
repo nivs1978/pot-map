@@ -69,6 +69,37 @@ function getMapName() {
       const name = filename.split('.').slice(0, -1).join('.') || filename;
       if (name) return name;
     }
+
+// Check GPU / rasterization limits and log a helpful warning if the map when
+// scaled would require backing surfaces larger than the GPU's max texture size.
+function checkRasterizationLimits() {
+  const maxTexture = (() => {
+    try {
+      const c = document.createElement('canvas');
+      const gl = c.getContext('webgl') || c.getContext('experimental-webgl');
+      if (!gl) return null;
+      return gl.getParameter(gl.MAX_TEXTURE_SIZE);
+    } catch (e) {
+      return null;
+    }
+  })();
+
+  if (!maxTexture) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const approxWidthPx = Math.ceil(state.mapWidth * state.scale * dpr);
+  const approxHeightPx = Math.ceil(state.mapHeight * state.scale * dpr);
+  const largestDim = Math.max(approxWidthPx, approxHeightPx);
+
+  if (largestDim >= maxTexture) {
+    console.warn(
+      `[tiles] Warning: scaled map size (${approxWidthPx}x${approxHeightPx} px) ` +
+        `exceeds or equals GPU max texture size (${maxTexture}px). ` +
+        `This may cause white/blank areas on some devices due to GPU/driver ` +
+        `limitations. Consider lowering max zoom or using a canvas/webgl renderer.`
+    );
+  }
+}
   } catch (e) {
     // ignore
   }
@@ -104,6 +135,15 @@ function handleImageReady() {
   state.mapHeight = declaredHeight ?? fallbackHeight;
   if (!state.mapWidth || !state.mapHeight) {
     return;
+  }
+
+  // Check GPU / rasterization limits and warn if the scaled map would exceed the
+  // device's max texture size. This helps diagnose machines that render large
+  // white areas due to driver/GPU limits.
+  try {
+    checkRasterizationLimits();
+  } catch (e) {
+    // ignore
   }
 
   // Hide the original single-source image when using tiles (it may still exist in the DOM).
