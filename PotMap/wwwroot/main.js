@@ -83,15 +83,15 @@ function initializeDiscordButton() {
     if (!btn) return;
     btn.addEventListener('click', () => {
       try {
-        const w = window.open('https://discord.gg/qkxxfNJghQ', '_blank');
+        const w = window.open('https://discord.gg/xvGVR67WvA', '_blank');
         if (w) {
           try { w.opener = null; } catch (e) { /* ignore */ }
         } else {
           // popup blocked, navigate instead
-          window.location.href = 'https://discord.gg/qkxxfNJghQ';
+          window.location.href = 'https://discord.gg/xvGVR67WvA';
         }
       } catch (e) {
-        try { window.location.href = 'https://discord.gg/qkxxfNJghQ'; } catch (err) { /* ignore */ }
+        try { window.location.href = 'https://discord.gg/xvGVR67WvA'; } catch (err) { /* ignore */ }
       }
     }, { passive: true });
   } catch (e) {
